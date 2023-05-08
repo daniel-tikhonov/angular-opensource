@@ -3,18 +3,19 @@ import {Component, TemplateRef, Type, Inject, ChangeDetectorRef} from '@angular/
 import {InstanceConfigHolderService} from '../service/instance-config-holder.service';
 
 export class BusyConfig implements IBusyConfig {
-  template: TemplateRef<any> | Type<any>;
-  templateNgStyle: {};
-  delay: number;
-  minDuration: number;
-  backdrop: boolean;
-  message: string;
-  wrapperClass: string;
-  disableAnimation: boolean;
+  template?: TemplateRef<any> | Type<any>;
+  templateNgStyle?: {};
+  delay?: number;
+  minDuration?: number;
+  backdrop?: boolean;
+  message?: string;
+  wrapperClass?: string;
+  disableAnimation?: boolean;
 
   constructor(config: IBusyConfig = {}) {
     for (const option of Object.keys(BUSY_CONFIG_DEFAULTS)) {
-      this[option] = config[option] !== undefined ? config[option] : BUSY_CONFIG_DEFAULTS[option];
+      const model = this as any;
+      model[option] = (config as any)[option] !== undefined ? (config as any)[option] : (BUSY_CONFIG_DEFAULTS as any)[option];
     }
   }
 }
@@ -49,7 +50,7 @@ export class DefaultBusyComponent {
   }
 
   get message() {
-    return this.instanceConfigHolder.config.message;
+    return this.instanceConfigHolder.config?.message;
   }
 }
 

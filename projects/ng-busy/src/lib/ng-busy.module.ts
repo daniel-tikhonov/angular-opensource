@@ -10,8 +10,7 @@ import {NgBusyComponent} from './component/ng-busy/ng-busy.component';
   imports: [CommonModule],
   declarations: [DefaultBusyComponent, NgBusyDirective, NgBusyComponent],
   providers: [BusyConfigHolderService, BusyTrackerService],
-  exports: [NgBusyDirective],
-  entryComponents: [DefaultBusyComponent, NgBusyComponent]
+  exports: [NgBusyDirective]
 })
 export class NgBusyModule {
   static forRoot(config: IBusyConfig): ModuleWithProviders<NgBusyModule> {

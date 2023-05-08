@@ -28,7 +28,7 @@ const timing = '.3s ease';
 })
 export class NgBusyComponent implements OnDestroy {
 
-  public wrapperClass: string;
+  public wrapperClass?: string;
   public disableAnimation = false;
   public showBackdrop = true;
   private readonly busyMonitor: Subscription;
@@ -42,9 +42,9 @@ export class NgBusyComponent implements OnDestroy {
     this.busyMonitor = this.busyEmitter.subscribe((isActive: boolean) => {
       const config = this.instanceConfigHolder.config;
       this.isActive = isActive;
-      this.wrapperClass = config.wrapperClass;
-      this.showBackdrop = config.backdrop;
-      this.disableAnimation = config.disableAnimation;
+      this.wrapperClass = config?.wrapperClass;
+      this.showBackdrop = config?.backdrop || true;
+      this.disableAnimation = config?.disableAnimation || false;
       if (this.cdr) {
         this.cdr.markForCheck();
       }

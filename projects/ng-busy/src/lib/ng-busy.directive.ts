@@ -34,15 +34,15 @@ export class NgBusyDirective implements DoCheck, OnDestroy {
 
   @Output() busyStart = new EventEmitter();
   @Output() busyStop = new EventEmitter();
-  private optionsNorm: IBusyConfig;
-  private busyRef: ComponentRef<NgBusyComponent>;
-  private componentViewRef: ViewRef;
+  private optionsNorm?: IBusyConfig;
+  private busyRef?: ComponentRef<NgBusyComponent>;
+  private componentViewRef?: ViewRef;
   private onStartSubscription: Subscription;
   private onStopSubscription: Subscription;
   private isLoading = false;
   private busyEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
-  public template: TemplateRef<any> | Type<any>;
-  public templateNgStyle: {};
+  public template: TemplateRef<any> | Type<any> | undefined;
+  public templateNgStyle: {} | undefined;
   private _option: any;
 
   constructor(private configHolder: BusyConfigHolderService,
@@ -77,9 +77,9 @@ export class NgBusyDirective implements DoCheck, OnDestroy {
     this.optionsNorm = this.normalizeOptions(this.options);
     this.instanceConfigHolder.config = this.optionsNorm;
     this.tracker.load({
-      busyList: this.optionsNorm.busy,
-      delay: this.optionsNorm.delay,
-      minDuration: this.optionsNorm.minDuration
+      busyList: this.optionsNorm.busy || [],
+      delay: this.optionsNorm.delay || 0,
+      minDuration: this.optionsNorm.minDuration || 0
     });
   }
 
@@ -91,12 +91,12 @@ export class NgBusyDirective implements DoCheck, OnDestroy {
 
   private recreateBusyIfNecessary() {
     if (!this.busyRef
-      || this.template !== this.optionsNorm.template
-      || this.templateNgStyle !== this.optionsNorm.templateNgStyle
+      || this.template !== this.optionsNorm?.template
+      || this.templateNgStyle !== this.optionsNorm?.templateNgStyle
     ) {
       this.destroyComponents();
-      this.template = this.optionsNorm.template;
-      this.templateNgStyle = this.optionsNorm.templateNgStyle;
+      this.template = this.optionsNorm?.template;
+      this.templateNgStyle = this.optionsNorm?.templateNgStyle;
       this.createBusy();
       this.busyEmitter.emit(this.isLoading);
     }
@@ -141,11 +141,14 @@ export class NgBusyDirective implements DoCheck, OnDestroy {
         }
       ], parent: this.injector
     });
-    this.template = this.optionsNorm.template;
+    this.template = this.optionsNorm?.template;
     this.busyRef = this.vcr.createComponent(factory, 0, injector, this.generateNgContent(injector));
   }
 
   private generateNgContent(injector: Injector) {
+    if (!this.template) {
+      return;
+    }
     if (typeof this.template === 'string') {
       const element = this.renderer.createText(this.template);
       return [[element]];

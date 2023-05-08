@@ -5,6 +5,7 @@ import {IBusyConfig} from '../model/busy-config';
   providedIn: 'root'
 })
 export class InstanceConfigHolderService {
-  public config: IBusyConfig;
-  constructor() { }
+  public config?: IBusyConfig;
+  constructor() { 
+  }
 }
